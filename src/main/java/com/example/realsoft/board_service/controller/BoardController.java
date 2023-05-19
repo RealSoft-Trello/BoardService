@@ -2,6 +2,7 @@ package com.example.realsoft.board_service.controller;
 
 import com.example.realsoft.board_service.exception.BoardNotFound;
 import com.example.realsoft.board_service.model.BoardDto;
+import com.example.realsoft.board_service.model.ListDto;
 import com.example.realsoft.board_service.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,10 @@ public class BoardController {
     @GetMapping("/user/{id}" )
     public ResponseEntity<List<BoardDto>> getBoardsByUserId(@PathVariable(name = "id" ) Long userId) {
         return ResponseEntity.ok(boardService.getBoardsByUserId(userId));
+    }
+
+    @GetMapping("/{id}/lists")
+    public ResponseEntity<List<ListDto>> getListsByBoard(@PathVariable(name = "id") Long boardId) throws BoardNotFound {
+        return ResponseEntity.ok(boardService.getListsByBoardId(boardId));
     }
 }

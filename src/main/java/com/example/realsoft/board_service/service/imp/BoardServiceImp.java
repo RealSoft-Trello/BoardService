@@ -3,11 +3,16 @@ package com.example.realsoft.board_service.service.imp;
 import com.example.realsoft.board_service.entity.Board;
 import com.example.realsoft.board_service.exception.BoardNotFound;
 import com.example.realsoft.board_service.model.BoardDto;
+import com.example.realsoft.board_service.model.ListDto;
 import com.example.realsoft.board_service.repository.BoardRepository;
 import com.example.realsoft.board_service.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +24,7 @@ public class BoardServiceImp implements BoardService {
 
     private final BoardRepository boardRepository;
     private final ModelMapper modelMapper;
+    private final RestTemplate restTemplate;
 
     @Override
     public List<BoardDto> getAllBoards() {
@@ -67,6 +73,22 @@ public class BoardServiceImp implements BoardService {
                 .stream()
                 .map(board -> modelMapper.map(board, BoardDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ListDto> getListsByBoardId(Long boardId) throws BoardNotFound {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if(board == null) {
+            throw new BoardNotFound("Id", boardId);
+        }
+        String listsUrl = "http://list-service/realsoft/trello/lists/board/" + boardId;
+        ResponseEntity<List<ListDto>> response = restTemplate.exchange(
+                listsUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ListDto>>() {}
+        );
+        return response.getBody();
     }
 
     private Board findBoard(Long boardId) throws BoardNotFound {
