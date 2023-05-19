@@ -1,18 +1,15 @@
 package com.example.realsoft.board_service.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Setter
-@Getter
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class BoardDto {
+    private Long boardId;
     private String title;
     private Long userId;
     private Set<Long> memberIds;

@@ -60,6 +60,15 @@ public class BoardServiceImp implements BoardService {
         boardRepository.delete(findBoard(boardId));
     }
 
+    @Override
+    public List<BoardDto> getBoardsByUserId(Long userId) {
+        return boardRepository
+                .getBoardsByUserId(userId)
+                .stream()
+                .map(board -> modelMapper.map(board, BoardDto.class))
+                .collect(Collectors.toList());
+    }
+
     private Board findBoard(Long boardId) throws BoardNotFound {
         return boardRepository.findById(boardId).orElseThrow(() ->
                 new BoardNotFound("Id", boardId));

@@ -11,4 +11,5 @@ public interface BoardService {
     BoardDto createBoard(BoardDto boardDto);
     BoardDto editBoard(Long boardId, BoardDto boardDto) throws BoardNotFound;
     void deleteBoard(Long boardId) throws BoardNotFound;
+    List<BoardDto> getBoardsByUserId(Long userId);
 }

@@ -42,4 +42,8 @@ public class BoardController {
         return new ResponseEntity<>("Board deleted successfully!", HttpStatus.OK);
     }
 
+    @GetMapping("/user/{id}" )
+    public ResponseEntity<List<BoardDto>> getBoardsByUserId(@PathVariable(name = "id" ) Long userId) {
+        return ResponseEntity.ok(boardService.getBoardsByUserId(userId));
+    }
 }
